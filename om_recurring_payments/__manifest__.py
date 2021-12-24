@@ -5,9 +5,9 @@
     'name': 'Odoo 15 Recurring Payment',
     'author': 'Odoo Mates',
     'category': 'Accounting',
-    'version': '15.0',
-    'description': """Use recurring payments to handle periodically repeated payments""",
-    'summary': 'Odoo 15 Recurring Payment',
+    'version': '1.3.0',
+    'description': """Odoo 15 Recurring Payment, Recurring Payment In Odoo, Odoo 15 Accounting""",
+    'summary': 'Use recurring payments to handle periodically repeated payments',
     'sequence': 11,
     'website': 'https://www.odoomates.tech',
     'depends': ['account'],
@@ -19,4 +19,5 @@
         'views/recurring_template_view.xml',
         'views/recurring_payment_view.xml'
     ],
+    'images': ['static/description/banner.png'],
 }

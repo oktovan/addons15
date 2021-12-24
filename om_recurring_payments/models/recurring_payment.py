@@ -28,16 +28,10 @@ class RecurringPayment(models.Model):
     date_end = fields.Date(string='End Date', required=True)
     template_id = fields.Many2one('account.recurring.template', 'Recurring Template',
                                   domain=[('state', '=', 'done')],required=True)
-    recurring_period = fields.Selection(selection=[('days', 'Days'),
-                                                   ('weeks', 'Weeks'),
-                                                   ('months', 'Months'),
-                                                   ('years', 'Years')], store=True,
-                                        related='template_id.recurring_period')
-    recurring_interval = fields.Integer('Recurring Interval', default=1, required=True,
+    recurring_period = fields.Selection(related='template_id.recurring_period')
+    recurring_interval = fields.Integer('Recurring Interval', required=True,
                                         related='template_id.recurring_interval', readonly=True)
-    journal_state = fields.Selection(selection=[('draft', 'Un Posted'),
-                                                ('posted', 'Posted')],
-                                     required=True, default='draft', string='Generate Journal As',
+    journal_state = fields.Selection(required=True, string='Generate Journal As',
                                      related='template_id.journal_state')
 
     description = fields.Text('Description')
@@ -104,6 +98,12 @@ class RecurringPayment(models.Model):
     def _check_amount(self):
         if self.amount <= 0:
             raise ValidationError(_('Amount Must Be Non-Zero Positive Number'))
+
+    def unlink(self):
+        for rec in self:
+            if rec.state == 'done':
+                raise ValidationError(_('Cannot delete done records !'))
+        return super(RecurringPayment, self).unlink()
 
 
 class RecurringPaymentLine(models.Model):
